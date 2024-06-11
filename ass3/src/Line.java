@@ -346,7 +346,7 @@ public class Line {
     // Otherwise, return the closest intersection point to the
     // start of the line.
     public Point closestIntersectionToStartOfLine(Rectangle rect) {
-        java.util.List<Point> points = rect.intersectionPoints(new Line(this.start, this.end));
+        java.util.List<Point> points = rect.intersectionPoints(this);
         if (points == null) {
             return null;
         }
