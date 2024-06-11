@@ -200,7 +200,6 @@ public class Line {
         // Calculate slope (m) and intercept (b)
         double m = (startY - endY) / (startX - endX);
         double b = startY - m * startX;
-        System.out.println(m * pointX + b);
         // Check if the point is on the line y = mx + b
         boolean onLine = HF.areEqual(pointY, m * pointX + b);
 
@@ -341,5 +340,22 @@ public class Line {
      */
     public ArrayList<Integer> getConnectionLines() {
         return connectionLines;
+    }
+
+    // If this line does not intersect with the rectangle, return null.
+    // Otherwise, return the closest intersection point to the
+    // start of the line.
+    public Point closestIntersectionToStartOfLine(Rectangle rect) {
+        java.util.List<Point> points = rect.intersectionPoints(new Line(this.start, this.end));
+        if (points == null) {
+            return null;
+        }
+        Point currentPoint = points.get(0);
+        for (Point p : points) {
+            if (this.start.distance(currentPoint) > this.start.distance(p)) {
+                currentPoint = p;
+            }
+        }
+        return currentPoint;
     }
 }

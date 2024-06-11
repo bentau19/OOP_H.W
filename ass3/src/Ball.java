@@ -29,7 +29,7 @@ public class Ball {
         this.point = center;
         radius = r;
         this.color = color;
-        setBorder(new Border(0, 0, AbstractArtDrawing.WIDTH, AbstractArtDrawing.HEIGHT));
+        setBorder(new Border(0, 0, HF.SCREEN_WIDTH, HF.SCREEN_HEIGHT));
     }
 
     /**
@@ -90,7 +90,7 @@ public class Ball {
         this.point = new Point(x, y);
         radius = r;
         this.color = color;
-        setBorder(new Border(0, 0, AbstractArtDrawing.WIDTH, AbstractArtDrawing.HEIGHT));
+        setBorder(new Border(0, 0, HF.SCREEN_WIDTH, HF.SCREEN_HEIGHT));
     }
 
     /**
