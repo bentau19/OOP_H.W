@@ -1,5 +1,7 @@
 import biuoop.DrawSurface;
 
+import java.awt.*;
+
 public class Block extends Rectangle implements Collidable, Sprite {
     public Block(Point upperLeft, double width, double height,java.awt.Color color) {
         super(upperLeft, width, height, color);
@@ -30,12 +32,19 @@ public class Block extends Rectangle implements Collidable, Sprite {
         return velocity;
     }
     public void drawOn(DrawSurface surface) {
+
         surface.setColor(this.getColor());
-        surface.drawRectangle((int) this.getUpperLeft().getX(), (int) this.getUpperLeft().getY(),
-                (int) this.getWidth(), (int) this.getHeight());
         surface.fillRectangle((int) this.getUpperLeft().getX(), (int) this.getUpperLeft().getY(),
                 (int) this.getWidth(), (int) this.getHeight());
+        surface.setColor(Color.black);
+        surface.drawRectangle((int) this.getUpperLeft().getX(), (int) this.getUpperLeft().getY(),
+                (int) this.getWidth(), (int) this.getHeight());
+
     }
 
-    public void timePassed(){}
+    public void timePassed() {}
+    public void addToGame(Game g) {
+        g.addSprite(this);
+        g.addCollidable(this);
+    }
 }

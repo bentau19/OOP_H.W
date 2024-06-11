@@ -167,4 +167,8 @@ public class Ball implements Sprite{
     public void timePassed() {
         moveOneStep();
     }
+
+    public void addToGame(Game g){
+        g.addSprite(this);
+    }
 }
