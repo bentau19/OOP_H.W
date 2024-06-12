@@ -6,7 +6,7 @@ public class Rectangle {
     public static final String BOTTOM = "bottom";
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
-    private final Point upperLeft;
+    private Point upperLeft;
     private final double width;
     private final double height;
     private final java.awt.Color color;
@@ -66,5 +66,8 @@ public class Rectangle {
     // Returns the upper-left point of the rectangle.
     public Point getUpperLeft() {
         return upperLeft;
+    }
+    public void setUpperLeft(Point upperLeft) {
+        this.upperLeft = upperLeft;
     }
 }

@@ -5,8 +5,8 @@ import biuoop.Sleeper;
 import java.awt.*;
 
 public class Game {
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
     private SpriteCollection sprites = new SpriteCollection();
     private GameEnvironment environment = new GameEnvironment();
     public void addCollidable(Collidable c) {
@@ -44,8 +44,11 @@ public class Game {
     }
     // Run the game -- start the animation loop.
     public void run() {
-        GUI gui = new GUI("title", WIDTH, HEIGHT);
+        GUI gui = new biuoop.GUI("title", WIDTH, HEIGHT);
         Sleeper sleeper = new Sleeper();
+
+        Paddle p = new Paddle(new Point(400,HEIGHT-100),100,20,Color.pink,10,gui);
+        p.addToGame(this);
         int framesPerSecond = 60;
         int millisecondsPerFrame = 1000 / framesPerSecond;
         while (true) {
