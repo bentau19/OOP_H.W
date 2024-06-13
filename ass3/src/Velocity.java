@@ -28,6 +28,7 @@ public class Velocity {
      */
     public static Velocity fromAngleAndSpeed(double angle, double speed) {
         speed = Math.abs(speed);
+        angle = angle + 90;
         angle = Math.toRadians(angle);
         double dx = Math.cos(angle) * speed;
         double dy = -Math.sin(angle) * speed;
@@ -49,7 +50,7 @@ public class Velocity {
      * @return the angle of the velocity in radians
      */
     public double getAngle() {
-        return Math.atan2(dy, dx);
+        return Math.atan2(dy, dx) - 90;
     }
 
     /**

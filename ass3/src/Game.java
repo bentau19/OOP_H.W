@@ -7,9 +7,9 @@ import java.awt.Color;
 public class Game {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
+    private final int  borderSize = 15;
     private SpriteCollection sprites = new SpriteCollection();
     private GameEnvironment environment = new GameEnvironment();
-    private onMoveCollection moves = new onMoveCollection();
     public void addCollidable(Collidable c) {
         this.environment.addCollidable(c);
     }
@@ -17,11 +17,8 @@ public class Game {
     public void addSprite(Sprite s) {
         this.sprites.addSprite(s);
     }
-    public void addonMovement(onMovement m) {
-        this.moves.addMove(m);
-    }
     public void addBorders() {
-        int borderSize = 30;
+
         Block block = new Block(new Point(0,0),WIDTH,borderSize,Color.GRAY);
         block.addToGame(this);
 
@@ -37,24 +34,28 @@ public class Game {
     // Initialize a new game: create the Blocks and Ball (and Paddle)
     // and add them to the game.
     public void initialize() {
-        for (int i = 0; i < 10; i++) {
-            Ball ball = new Ball(new Point(400,450),10, Color.GREEN,environment);
-            ball.setVelocity(i,6);
+        for (int i = 0; i < 2; i++) {
+            Ball ball = new Ball(new Point(400, 400), 6, java.awt.Color.RED,environment);
+            ball.setVelocity(Velocity.fromAngleAndSpeed(-30+i*60, 10));
             ball.addToGame(this);
         }
         addBorders();
-        for (int i=0;i<5;i++) {
-            Block block = new Block(new Point(100*i,200),100,50,Color.red);
-            block.addToGame(this);
+        int blockH = 25;
+        int blockW = 45;
+        int startBlockH = 150;
+        Color[] colors = new Color[]{Color.GRAY,Color.GREEN,Color.BLUE,Color.magenta,Color.ORANGE,Color.YELLOW};
+        for (int j = 0; j <6 ; j++) {
+            for (int i=0;i<12-j;i++) {
+                Block block = new Block(new Point(blockW*i+borderSize,startBlockH+blockH*j),blockW,blockH,colors[j]);
+                block.addToGame(this);
+            }
         }
-
     }
     // Run the game -- start the animation loop.
     public void run() {
         GUI gui = new biuoop.GUI("title", WIDTH, HEIGHT);
         Sleeper sleeper = new Sleeper();
-
-        Paddle p = new Paddle(new Point(400,HEIGHT-100),100,20,Color.pink,10,gui, moves);
+        Paddle p = new Paddle(new Point(400,HEIGHT-borderSize-20),100,20,Color.pink,10,gui);
         p.addToGame(this);
         int framesPerSecond = 60;
         int millisecondsPerFrame = 1000 / framesPerSecond;

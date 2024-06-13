@@ -8,7 +8,7 @@ import java.util.Random;
  * The Ball class represents a ball with a position, radius, color, and velocity.
  * The ball can move within a specified border and can avoid certain bad areas.
  */
-public class Ball implements Sprite, onMovement {
+public class Ball implements Sprite {
     private Point point;
     private final int radius;
     private java.awt.Color color;
@@ -159,11 +159,17 @@ public class Ball implements Sprite, onMovement {
         if (collisionInfo == null) {
             this.point = velocity.applyToPoint(point);
         } else {
-            double almostX = dx / Math.abs(dx);
-            double almostY = dy / Math.abs(dy);
-            this.point = new Point(collisionInfo.collisionPoint().getX() - almostX,
-                    collisionInfo.collisionPoint().getY() - almostY);
+            double almostX = HF.areEqual(dx,0)?0:dx / Math.abs(dx);
+            double almostY = HF.areEqual(dy,0)?0:dy / Math.abs(dy);
+
             this.velocity = collisionInfo.collisionObject().hit(collisionInfo.collisionPoint(), velocity);
+            if (!(Math.signum(dx) == Math.signum(this.velocity.getDx()) &&
+            Math.signum(dy) == Math.signum(this.velocity.getDy()))){
+                this.point = new Point(collisionInfo.collisionPoint().getX() - almostX,
+                        collisionInfo.collisionPoint().getY() - almostY);
+            }else{
+                this.point = velocity.applyToPoint(point);
+            }
         }
     }
 
@@ -173,6 +179,5 @@ public class Ball implements Sprite, onMovement {
 
     public void addToGame(Game g) {
         g.addSprite(this);
-        g.addonMovement(this);
     }
 }
