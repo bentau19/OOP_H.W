@@ -4,10 +4,16 @@ import biuoop.KeyboardSensor;
 public class Paddle extends Block implements Sprite, Collidable {
     private biuoop.KeyboardSensor keyboard;
     private int speed = 5;
-    public Paddle(Point upperLeft, double width, double height, java.awt.Color color, int speed,biuoop.GUI gui ) {
+    private onMoveCollection onMoveCollection;
+    public Paddle(Point upperLeft, double width, double height, java.awt.Color color,
+                  int speed,biuoop.GUI gui, onMoveCollection onMoveCollection) {
         super(upperLeft, width, height, color);
         this.speed = speed;
         this.keyboard = gui.getKeyboardSensor();
+        this.onMoveCollection = onMoveCollection;
+
+    }
+    public void moveItemsFromPaddle() {
 
     }
     public void moveLeft() {
@@ -33,17 +39,19 @@ public class Paddle extends Block implements Sprite, Collidable {
             moveRight();
         }
     }
-    //public void drawOn(DrawSurface d);
-    // Collidable
-    //public Rectangle getCollisionRectangle();
-    public Velocity hit(Point collisionPoint, Velocity currentVelocity) {
+    public Velocity hit(Point collisionPoint, Velocity currentVelocity, double returnAngle) {
         java.util.Dictionary<String, Line> lines = getLines();
         Velocity velocity = currentVelocity;
         for (String side : SIDES) {
             Line currentLine = lines.get(side);
             if (currentLine.isPointOnLine(collisionPoint)) {
                 if (side.equals(TOP) || side.equals(BOTTOM)) { //if its top or bottom
-                    velocity = new Velocity(velocity.getDx(), -velocity.getDy());
+                    if (HF.areEqual(returnAngle, 90)) {
+                        velocity = new Velocity(velocity.getDx(), -velocity.getDy());
+                    } else {
+                        velocity = Velocity.fromAngleAndSpeed(returnAngle, velocity.getSpeed());
+                    }
+
                 } else { //if its left or right
                     if (side.equals(RIGHT) || side.equals(LEFT)) {
                         velocity = new Velocity(-velocity.getDx(), velocity.getDy());
@@ -52,6 +60,20 @@ public class Paddle extends Block implements Sprite, Collidable {
             }
         }
         return velocity;
+    }
+    //public void drawOn(DrawSurface d);
+    // Collidable
+    //public Rectangle getCollisionRectangle();
+    public Velocity hit(Point collisionPoint, Velocity currentVelocity) {
+        if (!HF.areEqual(collisionPoint.getY(), this.getUpperLeft().getY())) {
+            return super.hit(collisionPoint, currentVelocity);
+        } else {
+            double part = this.getWidth() / 5;
+            double range = collisionPoint.getX() - this.getUpperLeft().getX();
+            int currentPart = (int) (range / part);
+            int angle = 150 - 30 * currentPart;
+            return super.hit(collisionPoint, currentVelocity, angle);
+        }
     }
     // Add this paddle to the game.
     //public void addToGame(Game g);

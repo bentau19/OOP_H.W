@@ -22,13 +22,15 @@ public class Velocity {
     /**
      * Creates a {@code Velocity} instance from an angle and speed.
      *
-     * @param angle the angle of the velocity in radians
+     * @param angle the angle of the velocity in degrees
      * @param speed the speed of the velocity
      * @return a new {@code Velocity} object with the specified angle and speed
      */
     public static Velocity fromAngleAndSpeed(double angle, double speed) {
+        speed = Math.abs(speed);
+        angle = Math.toRadians(angle);
         double dx = Math.cos(angle) * speed;
-        double dy = Math.sin(angle) * speed;
+        double dy = -Math.sin(angle) * speed;
         return new Velocity(dx, dy);
     }
 

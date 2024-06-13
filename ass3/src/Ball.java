@@ -8,7 +8,7 @@ import java.util.Random;
  * The Ball class represents a ball with a position, radius, color, and velocity.
  * The ball can move within a specified border and can avoid certain bad areas.
  */
-public class Ball implements Sprite{
+public class Ball implements Sprite, onMovement {
     private Point point;
     private final int radius;
     private java.awt.Color color;
@@ -79,6 +79,9 @@ public class Ball implements Sprite{
     }
     public Point getCenter() {
         return this.point;
+    }
+    public void setCenter(Point center) {
+        this.point = center;
     }
     /**
      * Gets the y-coordinate of the ball's center.
@@ -170,5 +173,6 @@ public class Ball implements Sprite{
 
     public void addToGame(Game g) {
         g.addSprite(this);
+        g.addonMovement(this);
     }
 }
