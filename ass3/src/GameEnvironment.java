@@ -1,21 +1,46 @@
+// 325394997 Ben Tau (not in the Javadoc)
 import java.util.ArrayList;
 
+/**
+ * The GameEnvironment class is responsible for managing all the collidable objects in the game.
+ * It allows adding collidables and finding the closest collision that an object will encounter along a trajectory.
+ */
 public class GameEnvironment {
-    private java.util.List<Collidable> collidables;
+    private final java.util.List<Collidable> collidables;
+
+    /**
+     * Constructs an empty GameEnvironment.
+     */
     public GameEnvironment() {
         collidables = new ArrayList<>();
     }
+
+    /**
+     * Constructs a GameEnvironment with a given list of collidables.
+     *
+     * @param collidables the list of collidables to initialize the environment with
+     */
     public GameEnvironment(java.util.List<Collidable> collidables) {
         this.collidables = collidables;
     }
-    // add the given collidable to the environment.
+
+    /**
+     * Adds the given collidable to the environment.
+     *
+     * @param c the collidable object to add
+     */
     public void addCollidable(Collidable c) {
         collidables.add(c);
     }
-    // Assume an object moving from line.start() to line.end().
-    // If this object will not collide with any of the collidables
-    // in this collection, return null. Else, return the information
-    // about the closest collision that is going to occur.
+
+    /**
+     * Returns information about the closest collision that is going to occur
+     * if an object moves from the start to the end of the given trajectory.
+     * If there is no collision, returns null.
+     *
+     * @param trajectory the line representing the object's path
+     * @return the information about the closest collision, or null if no collision occurs
+     */
     public CollisionInfo getClosestCollision(Line trajectory) {
         CollisionInfo currentCollision = null;
         for (Collidable c : collidables) {
@@ -36,5 +61,4 @@ public class GameEnvironment {
         }
         return currentCollision;
     }
-
 }

@@ -1,11 +1,8 @@
 // 325394997 Ben Tau (not in the Javadoc)
-
 import biuoop.DrawSurface;
 import java.awt.Color;
-import java.util.Random;
-
 /**
- * The Ball class represents a ball with a position, radius, color, and velocity.
+ * The Ball class represents a ball with a position, radius, color, velocity, and environment.
  * The ball can move within a specified border and can avoid certain bad areas.
  */
 public class Ball implements Sprite {
@@ -13,9 +10,9 @@ public class Ball implements Sprite {
     private final int radius;
     private java.awt.Color color;
     private Velocity velocity = new Velocity(0, 0);
-    private GameEnvironment environment;
+    private final GameEnvironment environment;
     /**
-     * Constructs a Ball object with a specified center point, radius, and color.
+     * Constructs a Ball object with a specified center point, radius, color, and environment.
      *
      * @param center the center point of the ball
      * @param r      the radius of the ball
@@ -24,12 +21,12 @@ public class Ball implements Sprite {
      */
     public Ball(Point center, int r, java.awt.Color color, GameEnvironment environment) {
         this.point = center;
-        radius = r;
+        this.radius = r;
         this.color = color;
         this.environment = environment;
     }
     /**
-     * Constructs a Ball object with specified position, radius, and color.
+     * Constructs a Ball object with specified position, radius, color, and environment.
      *
      * @param x     the x-coordinate of the ball's center
      * @param y     the y-coordinate of the ball's center
@@ -40,26 +37,6 @@ public class Ball implements Sprite {
     public Ball(int x, int y, int r, java.awt.Color color, GameEnvironment environment) {
         this(new Point(x, y), r, color, environment);
     }
-
-    /**
-     * Adds a random Ball object within the specified grey screen border, avoiding bad areas.
-     *
-     * @param greyScreen  the border within which the ball can move
-     * @param rad         the radius of the ball
-     * @param rand        the Random object used to generate random positions
-     * @param environment the environment of the ball
-     * @return a new Ball object
-     */
-    public static Ball addRandBall(Border greyScreen, int rad, Random rand,GameEnvironment environment) {
-        int x1 = rand.nextInt(greyScreen.getEndX() - rad
-                - (greyScreen.getStartY() + rad)) + 1 + greyScreen.getStartX() + rad;
-        int y1 = rand.nextInt(greyScreen.getEndY() - rad
-                - (greyScreen.getStartY() + rad)) + 1 + greyScreen.getStartY() + rad;
-        Ball ball = new Ball(x1, y1, rad, Color.GREEN, environment);
-        return ball;
-    }
-
-
     /**
      * Gets the x-coordinate of the ball's center.
      *
@@ -67,21 +44,6 @@ public class Ball implements Sprite {
      */
     public int getX() {
         return (int) point.getX();
-    }
-
-    /**
-     * Change the color.
-     *
-     * @param color the surface to draw the ball on
-     */
-    public void setColor(Color color) {
-        this.color = color;
-    }
-    public Point getCenter() {
-        return this.point;
-    }
-    public void setCenter(Point center) {
-        this.point = center;
     }
     /**
      * Gets the y-coordinate of the ball's center.
@@ -91,7 +53,14 @@ public class Ball implements Sprite {
     public int getY() {
         return (int) point.getY();
     }
-
+    /**
+     * Changes the color of the ball.
+     *
+     * @param color the new color of the ball
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
     /**
      * Gets the radius of the ball.
      *
@@ -100,7 +69,6 @@ public class Ball implements Sprite {
     public int getSize() {
         return radius;
     }
-
     /**
      * Gets the color of the ball.
      *
@@ -109,7 +77,6 @@ public class Ball implements Sprite {
     public java.awt.Color getColor() {
         return color;
     }
-
     /**
      * Draws the ball on the given DrawSurface.
      *
@@ -120,7 +87,6 @@ public class Ball implements Sprite {
         surface.drawCircle(getX(), getY(), radius);
         surface.fillCircle(getX(), getY(), radius);
     }
-
     /**
      * Sets the velocity of the ball.
      *
@@ -129,7 +95,6 @@ public class Ball implements Sprite {
     public void setVelocity(Velocity v) {
         velocity = v;
     }
-
     /**
      * Sets the velocity of the ball.
      *
@@ -139,7 +104,6 @@ public class Ball implements Sprite {
     public void setVelocity(double dx, double dy) {
         this.setVelocity(new Velocity(dx, dy));
     }
-
     /**
      * Gets the velocity of the ball.
      *
@@ -149,7 +113,7 @@ public class Ball implements Sprite {
         return velocity;
     }
     /**
-     * Moves the ball one step, checking for collisions with borders and bad areas.
+     * Moves the ball one step, taking into account possible collisions.
      */
     public void moveOneStep() {
         double dx = velocity.getDx();
@@ -159,24 +123,28 @@ public class Ball implements Sprite {
         if (collisionInfo == null) {
             this.point = velocity.applyToPoint(point);
         } else {
-            double almostX = HF.areEqual(dx,0)?0:dx / Math.abs(dx);
-            double almostY = HF.areEqual(dy,0)?0:dy / Math.abs(dy);
-
+            double almostX = new Line(collisionInfo.collisionPoint(), this.point).middle().getX();
+            double almostY = new Line(collisionInfo.collisionPoint(), this.point).middle().getY();
             this.velocity = collisionInfo.collisionObject().hit(collisionInfo.collisionPoint(), velocity);
-            if (!(Math.signum(dx) == Math.signum(this.velocity.getDx()) &&
-            Math.signum(dy) == Math.signum(this.velocity.getDy()))){
-                this.point = new Point(collisionInfo.collisionPoint().getX() - almostX,
-                        collisionInfo.collisionPoint().getY() - almostY);
-            }else{
+            if (!(Math.signum(dx) == Math.signum(this.velocity.getDx())
+                    && Math.signum(dy) == Math.signum(this.velocity.getDy()))) {
+                this.point = new Point(almostX, almostY);
+            } else {
                 this.point = velocity.applyToPoint(point);
             }
         }
     }
-
+    /**
+     * Updates the ball's state, typically called once per frame.
+     */
     public void timePassed() {
         moveOneStep();
     }
-
+    /**
+     * Adds the ball to the given game.
+     *
+     * @param g the game to add the ball to
+     */
     public void addToGame(Game g) {
         g.addSprite(this);
     }

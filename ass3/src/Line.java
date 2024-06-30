@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Line {
     private final Point end, start;
-    private ArrayList<Integer> connectionLines = new ArrayList<>();
+    private final ArrayList<Integer> connectionLines = new ArrayList<>();
 
     /**
      * Constructs a Line with the given start and end points.
@@ -341,10 +341,14 @@ public class Line {
     public ArrayList<Integer> getConnectionLines() {
         return connectionLines;
     }
-
-    // If this line does not intersect with the rectangle, return null.
-    // Otherwise, return the closest intersection point to the
-    // start of the line.
+    /**
+     * Finds the closest intersection point between this line and the given rectangle.
+     * If this line does not intersect with the rectangle, returns null.
+     * Otherwise, returns the closest intersection point to the start of the line.
+     *
+     * @param rect the rectangle to find intersections with
+     * @return the closest intersection point to the start of the line, or null if no intersection
+     */
     public Point closestIntersectionToStartOfLine(Rectangle rect) {
         java.util.List<Point> points = rect.intersectionPoints(this);
         if (points == null) {

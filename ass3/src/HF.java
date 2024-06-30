@@ -3,8 +3,6 @@
 *This class is full of Helping Functions (function that used in many classes).
  */
 public class HF {
-    public static final int SCREEN_HEIGHT = 720;
-    public static final int SCREEN_WIDTH = 720;
     private static final double THRESHOLD = 1e-10;
     /**
      * Compares two double values with a threshold to account for floating-point imprecision.

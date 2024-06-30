@@ -1,6 +1,12 @@
-
+// 325394997 Ben Tau (not in the Javadoc)
 import java.util.Dictionary;
 import java.util.Hashtable;
+
+/**
+ * The Rectangle class represents a rectangle in a 2D space defined by an upper-left corner,
+ * width, height, and color. It provides methods to retrieve its sides as lines, find intersection
+ * points with a line, and manage its dimensions and position.
+ */
 public class Rectangle {
     public static final String TOP = "top";
     public static final String BOTTOM = "bottom";
@@ -11,15 +17,27 @@ public class Rectangle {
     private final double height;
     private final java.awt.Color color;
     protected static final String[] SIDES = {TOP, BOTTOM, LEFT, RIGHT};
-    // Create a new rectangle with location and width/height.
+
+    /**
+     * Constructs a Rectangle object with the specified upper-left corner, width, height, and color.
+     *
+     * @param upperLeft the upper-left corner of the rectangle
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     * @param color the color of the rectangle
+     */
     public Rectangle(Point upperLeft, double width, double height, java.awt.Color color) {
         this.upperLeft = upperLeft;
         this.width = width;
         this.height = height;
         this.color = color;
     }
-    // Return a (possibly empty) List of intersection points
-    // with the specified line.
+
+    /**
+     * Returns a dictionary of lines representing the sides of the rectangle.
+     *
+     * @return a dictionary mapping side names (e.g., "top", "bottom") to Line objects
+     */
     public java.util.Dictionary<String, Line> getLines() {
         Point upperRight = new Point(upperLeft.getX() + width, upperLeft.getY());
         Point lowerLeft = new Point(upperLeft.getX(), upperLeft.getY() + height);
@@ -32,6 +50,12 @@ public class Rectangle {
         return dict;
     }
 
+    /**
+     * Finds intersection points between the rectangle and a given line.
+     *
+     * @param line the line to find intersections with
+     * @return a list of intersection points with the rectangle, or null if no intersections exist
+     */
     public java.util.List<Point> intersectionPoints(Line line) {
         java.util.Dictionary<String, Line> lines = getLines();
         java.util.List<Point> points = new java.util.ArrayList<>();
@@ -40,7 +64,7 @@ public class Rectangle {
             Point currentPoint = currentLine.intersectionWith(line);
             if (currentPoint != null) {
                 boolean flag = true;
-                for (Point p : points) { //check if the Point already exist.
+                for (Point p : points) { // check if the Point already exists
                     if (currentPoint.distance(p) == 0) {
                         flag = false;
                         break;
@@ -53,20 +77,48 @@ public class Rectangle {
         }
         return points.isEmpty() ? null : points;
     }
-    // Return the width and height of the rectangle
+
+    /**
+     * Returns the width of the rectangle.
+     *
+     * @return the width of the rectangle
+     */
     public double getWidth() {
         return width;
     }
+
+    /**
+     * Returns the height of the rectangle.
+     *
+     * @return the height of the rectangle
+     */
     public double getHeight() {
         return height;
     }
+
+    /**
+     * Returns the color of the rectangle.
+     *
+     * @return the color of the rectangle
+     */
     public java.awt.Color getColor() {
         return color;
     }
-    // Returns the upper-left point of the rectangle.
+
+    /**
+     * Returns the upper-left corner point of the rectangle.
+     *
+     * @return the upper-left corner point of the rectangle
+     */
     public Point getUpperLeft() {
         return upperLeft;
     }
+
+    /**
+     * Sets the upper-left corner point of the rectangle.
+     *
+     * @param upperLeft the new upper-left corner point of the rectangle
+     */
     public void setUpperLeft(Point upperLeft) {
         this.upperLeft = upperLeft;
     }
