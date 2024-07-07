@@ -18,13 +18,13 @@ public class ExpressionsTest {
         Expression x = new Var("x");
         Expression y = new Var("y");
         Expression z = new Var("z");
-        Expression ex = new And(new Or(x, y), new Not(z));
+        Expression ex = new And(new Or(x, z), new Not(y));
         System.out.println(ex);
 
-        Map<String, Boolean> map = new HashMap<String, Boolean>();
+        Map<String, Boolean> map = new HashMap<>();
         map.put("x", true);
         map.put("y", false);
-        map.put("z", true);
+        map.put("z", false);
 
         System.out.println(ex.evaluate(map));
         System.out.println(ex.nandify());

@@ -27,12 +27,11 @@ public class And extends BinaryExpression {
     }
 
     /**
+     * ok.
      * Simplifies the AND expression according to the following rules:
-     * <ul>
-     *     <li>x ∧ 1 = x</li>
-     *     <li>x ∧ 0 = 0</li>
-     *     <li>x ∧ x = x</li>
-     * </ul>
+     *     x ∧ 1 = x
+     *     x ∧ 0 = 0
+     *     x ∧ x = x
      *
      * @return the simplified expression
      */
